@@ -66,7 +66,7 @@ footer{margin-top:20px;color:var(--muted);font-size:.8rem;text-align:center}
 <div class="wrap">
 <header><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#1f5f7a"/><circle cx="32" cy="32" r="20" fill="none" stroke="#fff" stroke-width="3"/><path d="M32 14 L38 32 L32 50 L26 32 Z" fill="#fff"/><path d="M32 14 L38 32 L26 32 Z" fill="#e3a64a"/><circle cx="32" cy="32" r="3" fill="#1f5f7a"/></svg><div><h1>Boussole Révisions</h1><div class="sub">Master en Santé Publique, option CPH · ESS-UCAC</div></div></header>
 <main id="app"></main>
-<footer>Version du 21/10/2026 (v2) · préparée par William DOUNLA ZANGUE, MSP-CPH. Signalez toute erreur pour qu'elle soit corrigée.</footer>
+<footer>Version du 21/10/2026 (v3) · préparée par William DOUNLA ZANGUE, MSP-CPH. Signalez toute erreur pour qu'elle soit corrigée.</footer>
 </div>
 <script>
 /* =====================================================================
@@ -137,7 +137,12 @@ function qEnd(){var n=qo.length,d=new Date();save("last_"+C.id,{s:qs,n:n,d:d.toL
  if(qWrong.length)$("qw").onclick=function(){qStart(qWrong)};$("qh").onclick=course;toTop()}
 courses();
 /* Mode hors ligne quand l'application est installée depuis un site web */
-if("serviceWorker" in navigator&&/^https?:$/.test(location.protocol)){navigator.serviceWorker.register("sw.js").catch(function(){})}
+if("serviceWorker" in navigator&&/^https?:$/.test(location.protocol)){
+ var hadCtrl=!!navigator.serviceWorker.controller,reloaded=false;
+ navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(function(r){r.update()}).catch(function(){});
+ /* Quand une nouvelle version s'installe, la page se recharge une fois pour l'afficher */
+ navigator.serviceWorker.addEventListener("controllerchange",function(){if(hadCtrl&&!reloaded){reloaded=true;location.reload()}});
+}
 </script>
 </body>
 </html>
